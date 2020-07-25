@@ -48,4 +48,67 @@ describe('httpMiddleware', () => {
             expect(store.getActions()).toEqual(expectedActions);
         })
     })
+
+    it('creates FETCH_TODOS_FAILURE when fetching failed', () => {
+        // given
+        fetchMock.get('http://localhost:8080/api/todos', {
+            status: 400,
+            body: {
+                message: 'Oops'
+            },
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+
+        // when
+        const store = mockStore({});
+
+        // then
+        const expectedActions = [
+            {
+                type: TodoActionTypes.FETCH_TODOS_REQUEST,
+                payload: {}
+            },
+            {
+                type: TodoActionTypes.FETCH_TODOS_FAILURE,
+                payload: {},
+                error: new Error('Oops')
+            }
+        ];
+
+        store.dispatch(fetchTodos()).then(() => {
+            expect(store.getActions()).toEqual(expectedActions);
+        })
+    })
+
+    it('handles non-json response', () => {
+        // given
+        fetchMock.get('http://localhost:8080/api/todos', {
+            body: 'Some plain text here',
+            headers: {
+                'Content-Type': 'text/plain'
+            }
+        })
+
+        // when
+        const store = mockStore({});
+
+        // then
+        const expectedActions = [
+            {
+                type: TodoActionTypes.FETCH_TODOS_REQUEST,
+                payload: {}
+            },
+            {
+                type: TodoActionTypes.FETCH_TODOS_FAILURE,
+                payload: {},
+                error: new Error('Something went wrong')
+            }
+        ];
+
+        store.dispatch(fetchTodos()).then(() => {
+            expect(store.getActions()).toEqual(expectedActions);
+        })
+    })
 })
