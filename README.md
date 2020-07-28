@@ -8,7 +8,7 @@ Probably too simple to even use Redux in the first place.\
 The whole purpose of it is to just showcase how you can make these 3 technologies work together nicely in a single project.\
 And that's the first reason why I didn't spend much time on styling the frontend (second being I'm just bad at it :no_mouth:).
 
-![screenshot_1](github/screenshot_1.png)
+![screenshot_1](https://github.com/boavenn/TodoAppExample/blob/master/github/Screenshot_1.png)
 
 ## Building
 I sincerely doubt that anyone would want to clone and build this project, but just in case:
