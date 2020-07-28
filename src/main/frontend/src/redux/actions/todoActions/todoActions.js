@@ -5,7 +5,7 @@ export const fetchTodos = () => {
         type: TodoActionTypes.FETCH_TODOS,
         payload: {},
         httpAction: {
-            endpoint: 'http://localhost:8080/api/todos',
+            endpoint: '/api/todos',
             options: {}
         }
     }
@@ -16,7 +16,7 @@ export const addTodo = (description, deadline) => {
         type: TodoActionTypes.ADD_TODO,
         payload: { description },
         httpAction: {
-            endpoint: 'http://localhost:8080/api/todos',
+            endpoint: '/api/todos',
             options: {
                 method: 'POST',
                 body: JSON.stringify({
@@ -36,7 +36,7 @@ export const updateTodo = (id, changes) => {
         type: TodoActionTypes.UPDATE_TODO,
         payload: { changes },
         httpAction: {
-            endpoint: `http://localhost:8080/api/todos/${id}`,
+            endpoint: `/api/todos/${id}`,
             options: {
                 method: 'PATCH',
                 body: JSON.stringify({
@@ -57,7 +57,7 @@ export const deleteTodo = id => {
         type: TodoActionTypes.DELETE_TODO,
         payload: { id },
         httpAction: {
-            endpoint: `http://localhost:8080/api/todos/${id}`,
+            endpoint: `/api/todos/${id}`,
             options: {
                 method: 'DELETE'
             }

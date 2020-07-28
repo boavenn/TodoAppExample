@@ -1,3 +1,5 @@
+const URL_PREFIX = process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : ''
+
 const handleResponse = async response => {
     const contentType = response.headers.get('Content-Type');
     if (contentType && contentType.toLowerCase() === 'application/json') {
@@ -21,7 +23,7 @@ const httpMiddleware = store => next => action => {
             payload: action.payload
         });
 
-        return fetch(endpoint, options)
+        return fetch(URL_PREFIX + endpoint, options)
             .then(response => handleResponse(response))
             .then(json => next({
                 type: action.type + '_SUCCESS',
