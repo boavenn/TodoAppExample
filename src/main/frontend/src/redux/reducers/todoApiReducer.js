@@ -1,109 +1,103 @@
-import { TodoActionTypes } from "../actions/actionTypes";
-import httpReducerBuilder from "../util/httpReducerBuilder";
+import { createSlice, createReducer } from "@reduxjs/toolkit";
+import { fetchTodos, addTodo, deleteTodo, updateTodo } from "../actions/actions";
 
 export const todoApiInitialState = {
     isFetching: false,
     error: null,
     todos: []
-}
+};
 
-const fetchTodosSubreducer = (state, action) => {
-    switch (action.type) {
-        case TodoActionTypes.FETCH_TODOS_REQUEST:
-            return {
-                ...state,
-                isFetching: true
-            };
-        case TodoActionTypes.FETCH_TODOS_SUCCESS:
-            return {
-                isFetching: false,
-                todos: action.response,
-                error: null
-            };
-        case TodoActionTypes.FETCH_TODOS_FAILURE:
-            return {
-                ...state,
-                isFetching: false,
-                error: action.error
-            };
-        default:
-            return state;
+const fetchTodosReducer = createSlice({
+    name: fetchTodos.toString(),
+    initialState: todoApiInitialState,
+    reducers: {
+        request: state => ({
+            ...state,
+            isFetching: true
+        }),
+        success: (state, action) => ({
+            ...state,
+            isFetching: false,
+            todos: action.meta.response,
+            error: null
+        }),
+        failure: (state, action) => ({
+            ...state,
+            isFetching: false,
+            error: action.error
+        })
     }
-}
+});
 
-const addTodoSubreducer = (state, action) => {
-    switch (action.type) {
-        case TodoActionTypes.ADD_TODO_REQUEST:
-            return {
-                ...state,
-                error: null
-            }
-        case TodoActionTypes.ADD_TODO_SUCCESS:
-            return {
-                ...state,
-                todos: [...state.todos, action.response]
-            };
-        case TodoActionTypes.ADD_TODO_FAILURE:
-            return {
-                ...state,
-                error: action.error
-            };
-        default:
-            return state;
+const addTodoReducer = createSlice({
+    name: addTodo.toString(),
+    initialState: todoApiInitialState,
+    reducers: {
+        request: state => ({
+            ...state,
+            error: null
+        }),
+        success: (state, action) => ({
+            ...state,
+            todos: [...state.todos, action.meta.response]
+        }),
+        failure: (state, action) => ({
+            ...state,
+            error: action.error
+        })
     }
-}
+});
 
-const updateTodoSubreducer = (state, action) => {
-    switch (action.type) {
-        case TodoActionTypes.UPDATE_TODO_REQUEST:
-            return {
-                ...state,
-                error: null
-            }
-        case TodoActionTypes.UPDATE_TODO_SUCCESS:
-            const updatedTodo = action.response;
+const updateTodoReducer = createSlice({
+    name: updateTodo.toString(),
+    initialState: todoApiInitialState,
+    reducers: {
+        request: state => ({
+            ...state,
+            error: null
+        }),
+        success: (state, action) => {
+            const updatedTodo = action.meta.response;
             return {
                 ...state,
                 todos: state.todos.map(todo => todo.id === updatedTodo.id ? updatedTodo : todo)
-            };
-        case TodoActionTypes.UPDATE_TODO_FAILURE:
-            return {
-                ...state,
-                error: action.error
-            };
-        default:
-            return state;
-    }
-}
-
-const deleteTodoSubreducer = (state, action) => {
-    switch (action.type) {
-        case TodoActionTypes.DELETE_TODO_REQUEST:
-            return {
-                ...state,
-                error: null
             }
-        case TodoActionTypes.DELETE_TODO_SUCCESS:
+        },
+        failure: (state, action) => ({
+            ...state,
+            error: action.error
+        })
+    }
+});
+
+const deleteTodoReducer = createSlice({
+    name: deleteTodo.toString(),
+    initialState: todoApiInitialState,
+    reducers: {
+        request: state => ({
+            ...state,
+            error: null
+        }),
+        success: (state, action) => {
             const deletedTodoId = action.payload.id;
             return {
                 ...state,
                 todos: state.todos.filter(todo => todo.id !== deletedTodoId)
             };
-        case TodoActionTypes.DELETE_TODO_FAILURE:
-            return {
-                ...state,
-                error: action.error
-            };
-        default:
-            return state;
+        },
+        failure: (state, action) => ({
+            ...state,
+            error: action.error
+        })
     }
-}
+});
 
-const todoApiReducer = httpReducerBuilder
-    .addSubreducer(TodoActionTypes.FETCH_TODOS, fetchTodosSubreducer)
-    .addSubreducer(TodoActionTypes.ADD_TODO, addTodoSubreducer)
-    .addSubreducer(TodoActionTypes.UPDATE_TODO, updateTodoSubreducer)
-    .addSubreducer(TodoActionTypes.DELETE_TODO, deleteTodoSubreducer)
-    .build(todoApiInitialState);
+const todoApiReducer = createReducer(todoApiInitialState, builder => {
+    builder
+        .addMatcher(action => action.type.startsWith(fetchTodos.toString()), fetchTodosReducer.reducer)
+        .addMatcher(action => action.type.startsWith(addTodo.toString()), addTodoReducer.reducer)
+        .addMatcher(action => action.type.startsWith(updateTodo.toString()), updateTodoReducer.reducer)
+        .addMatcher(action => action.type.startsWith(deleteTodo.toString()), deleteTodoReducer.reducer)
+});
 
 export default todoApiReducer;

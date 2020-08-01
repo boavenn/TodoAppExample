@@ -1,14 +1,9 @@
-import { TodoFilterActionTypes } from "../actions/actionTypes";
+import { createReducer } from "@reduxjs/toolkit";
+import { showAll } from "../actions/actions";
 
-const todoFilterReducer = (state = TodoFilterActionTypes.SHOW_ALL, action) => {
-    switch (action.type) {
-        case TodoFilterActionTypes.SHOW_ALL:
-        case TodoFilterActionTypes.SHOW_DONE:
-        case TodoFilterActionTypes.SHOW_NOT_DONE:
-            return action.type;
-        default:
-            return state;
-    }
-}
+const todoFilterReducer = createReducer(showAll.toString(), builder => {
+    builder
+        .addMatcher(action => action.type.startsWith('filter'), (state, action) => action.type);
+})
 
 export default todoFilterReducer;

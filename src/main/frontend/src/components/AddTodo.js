@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { addTodo } from '../redux/actions/todoActions/todoActions';
+import { addTodo } from '../redux/actions/actions';
 import styled from 'styled-components';
 
 const Container = styled.div`

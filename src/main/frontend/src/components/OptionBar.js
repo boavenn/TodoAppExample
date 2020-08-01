@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { showDone, showAll, showNotDone } from '../redux/actions/todoActions/todoFilterActions';
+import { showDone, showAll, showNotDone } from '../redux/actions/actions';
 import { useDispatch } from 'react-redux';
-import { sortByDeadlineAscending, sortByDeadlineDescending } from '../redux/actions/todoActions/todoSortActions';
+import { sortByDeadlineAscending, sortByDeadlineDescending } from '../redux/actions/actions';
 
 const Container = styled.div`
     width: 28vw;

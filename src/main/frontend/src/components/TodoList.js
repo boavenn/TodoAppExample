@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
-import { createSelector } from 'reselect';
-import { TodoFilterActionTypes, TodoSortActionTypes } from '../redux/actions/actionTypes';
+import { createSelector } from '@reduxjs/toolkit';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchTodos, toggleTodo, deleteTodo, updateTodo } from '../redux/actions/todoActions/todoActions';
+import { fetchTodos, toggleTodo, deleteTodo, updateTodo } from '../redux/actions/actions';
 import Todo from './Todo';
 import styled from 'styled-components';
 import sortTodosByDeadline from '../util/sortTodosByDeadline';
+import { showAll, showDone, showNotDone } from '../redux/actions/actions';
+import { sortByDeadlineAscending, sortByDeadlineDescending } from '../redux/actions/actions';
 
 const List = styled.div`
     display: flex;
@@ -33,11 +34,11 @@ const getTodos = state => state.todosBranch.api.todos;
 
 const getFilteredTodos = createSelector([getFilter, getTodos], (filter, todos) => {
     switch (filter) {
-        case TodoFilterActionTypes.SHOW_ALL:
+        case showAll.toString():
             return todos;
-        case TodoFilterActionTypes.SHOW_DONE:
+        case showDone.toString():
             return todos.filter(todo => todo.isDone);
-        case TodoFilterActionTypes.SHOW_NOT_DONE:
+        case showNotDone.toString():
             return todos.filter(todo => !todo.isDone);
         default:
             return todos;
@@ -46,9 +47,9 @@ const getFilteredTodos = createSelector([getFilter, getTodos], (filter, todos) =
 
 const getFilteredSortedTodos = createSelector([getSort, getFilteredTodos], (sort, todos) => {
     switch (sort) {
-        case TodoSortActionTypes.BY_DEADLINE_ASCENDING:
+        case sortByDeadlineAscending.toString():
             return [...todos].sort((a, b) => sortTodosByDeadline(a, b));
-        case TodoSortActionTypes.BY_DEADLINE_DESCENDING:
+        case sortByDeadlineDescending.toString():
             return [...todos].sort((a, b) => sortTodosByDeadline(b, a));
         default:
             return todos;

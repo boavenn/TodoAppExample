@@ -14,24 +14,26 @@ const handleResponse = async response => {
 }
 
 const httpMiddleware = store => next => action => {
-    if (action['httpAction']) {
-        const endpoint = action.httpAction.endpoint;
-        const options = action.httpAction.options;
+    if (action.meta && action.meta.httpAction) {
+        const endpoint = action.meta.httpAction.endpoint;
+        const options = action.meta.httpAction.options;
 
         next({
-            type: action.type + '_REQUEST',
+            type: action.type + '/request',
             payload: action.payload
         });
 
         return fetch(URL_PREFIX + endpoint, options)
             .then(response => handleResponse(response))
             .then(json => next({
-                type: action.type + '_SUCCESS',
+                type: action.type + '/success',
                 payload: action.payload,
-                response: json
+                meta: {
+                    response: json
+                }
             }))
             .catch(error => next({
-                type: action.type + '_FAILURE',
+                type: action.type + '/failure',
                 payload: action.payload,
                 error: error
             }))

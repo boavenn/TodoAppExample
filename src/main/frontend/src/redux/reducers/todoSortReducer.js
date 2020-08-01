@@ -1,13 +1,9 @@
-const { TodoSortActionTypes } = require("../actions/actionTypes");
+import { createReducer } from "@reduxjs/toolkit";
+import { sortByDeadlineAscending } from "../actions/actions";
 
-const todoSortReducer = (state = TodoSortActionTypes.BY_DEADLINE_ASCENDING, action) => {
-    switch (action.type) {
-        case TodoSortActionTypes.BY_DEADLINE_ASCENDING:
-        case TodoSortActionTypes.BY_DEADLINE_DESCENDING:
-            return action.type;
-        default:
-            return state;
-    }
-}
+const todoSortReducer = createReducer(sortByDeadlineAscending.toString(), builder => {
+    builder
+        .addMatcher(action => action.type.startsWith('sort'), (state, action) => action.type);
+})
 
 export default todoSortReducer;
