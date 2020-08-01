@@ -13,14 +13,16 @@ public class TodoUpdateDTO
 {
     @Length(min = 1, max = 80, message = "Description length must be between {min} and {max} characters long")
     private String description;
-    private boolean isDone;
+    private Boolean isDone;
     private Date deadline;
 
     public void applyChangesTo(Todo todo) {
         if (description != null) {
             todo.setDescription(description);
         }
-        todo.setDone(isDone);
+        if (isDone != null) {
+            todo.setDone(isDone);
+        }
         if (deadline != null) {
             todo.setDeadline(deadline);
         }
