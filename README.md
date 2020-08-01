@@ -24,5 +24,4 @@ But note that it may take some time when ran for the first time as it have to do
 * [Spring Boot](https://spring.io/)
 * [React](https://en.reactjs.org/)
 * [Redux](https://redux.js.org/)
-  * [redux-thunk](https://github.com/reduxjs/redux-thunk)
-  * [reselect](https://github.com/reduxjs/reselect)
+  * [Redux Toolkit](https://redux-toolkit.js.org/)
