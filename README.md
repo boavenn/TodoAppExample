@@ -1,4 +1,4 @@
-# TodoAppExample
+# todo-app-example
 Sample application using Spring Boot, React and Redux to showcase how everything can be used in a single app
 
 ## Overview
